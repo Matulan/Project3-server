@@ -22,18 +22,25 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true},
-    cardDetails: {
+    accountDetails: {
       type: String,
       required: true},
     picture: {
       type: String,
-      },
-     },
-    {
+        },
+    cars: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: "Car"
+            }]
+  },
+  {
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
-)
+  )
+  
+
 
 const User = model("User", userSchema);
 
