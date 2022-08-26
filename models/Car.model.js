@@ -1,12 +1,12 @@
 const { Schema, model } = require("mongoose");
 
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
-const userSchema = new Schema(
+const carSchema = new Schema(
     {
-    cartype: {
+    carType: {
       type: String,
       required: true},
-    carmodel: {
+    carModel: {
       type: String,
       required: true},
     price: {
@@ -33,6 +33,6 @@ const userSchema = new Schema(
     )
 
 
-const User = model("User", userSchema);
+const Car = model("Car", carSchema);
 
-module.exports = User;
+module.exports = Car;

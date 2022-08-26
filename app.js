@@ -8,6 +8,7 @@ require("./db");
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
 const express = require("express");
+const { isAuthenticated } = require("./middleware/jwt.middleware");
 
 const app = express();
 
@@ -18,6 +19,19 @@ require("./config")(app);
 // Contrary to the views version, all routes are controlled from the routes/index.js
 const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes);
+
+
+const authRouter = require("./routes/auth.routes");          
+app.use("/auth", authRouter);  
+
+const carRouter = require("./routes/car.routes");          
+app.use("/api", isAuthenticated, carRouter);  
+
+const rentalUserRouter = require("./routes/RentalUser.routes");          
+app.use("/api", isAuthenticated, rentalUserRouter); 
+
+const requestRouter = require("./routes/request.routes");          
+app.use("/api", isAuthenticated, requestRouter);  
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
