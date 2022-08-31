@@ -11,7 +11,7 @@ const saltRounds = 10;
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
-const RentalUser = require("../models/RentalUser.model");
+
 
 const { isAuthenticated } = require('../middleware/jwt.middleware');
 
@@ -65,71 +65,6 @@ router.post('/signup', (req, res) => {
       .then((user) => {
         req.session.user = user;
         res.status(201).json(user);
-      })
-      .catch((error) => {
-        if (error instanceof mongoose.Error.ValidationError) {
-          return res.status(400).json({ errorMessage: error.message });
-        }
-        if (error.code === 11000) {
-          return res.status(400).json({
-            errorMessage:
-              "email need to be unique. The email you chose is already in use.",
-          });
-        }
-        return res.status(500).json({ errorMessage: error.message });
-      });
-  });
-});
-
-// Rental-user sign-up
-router.post("/signup-rental", (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email) {
-    return res
-      .status(400)
-      .json({ errorMessage: "Please provide your email." });
-  }
-
-  if (password.length < 8) {
-    return res
-      .status(400)
-      .json({ errorMessage: "Your password needs to be at least 8 characters long." });
-  }
-
-  // Search the database for a user with the username submitted in the form
-  RentalUser.findOne({ email }).then((found) => {
-    // If the user is found, send the message username is taken
-    if (found) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Email is already in use." });
-    }
-
-    // if user is not found, create a new user - start with hashing the password
-    return bcrypt
-      .genSalt(saltRounds)
-      .then((salt) => bcrypt.hash(password, salt))
-      .then((hashedPassword) => {
-        // Create a user and save it in the database
-        return RentalUser.create({
-          email,
-          password: hashedPassword,
-          firstName: "",
-          lastName: "",
-          adress: "",
-          postBox: "",
-          accountDetails: "",
-          picture: ""
-        });
-      })
-      .then((rentalUser) => {
-        // Bind the user to the session object
-
-        
-
-        req.session.user = rentalUser;
-        res.status(201).json(rentalUser);
       })
       .catch((error) => {
         if (error instanceof mongoose.Error.ValidationError) {

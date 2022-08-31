@@ -1,20 +1,33 @@
 const router = require("express").Router();
 const Car = require('../models/Car.model');
+const express = require("express");
+const User = require("../models/User.model");
 
 
-router.post('/cars', (req, res, next) => {
-    const { carType, carModel, price, passengers, picture, engine, gear } = req.body;
+router.get("/getallcars", async (req, res) => {
+  try {
+    const cars = await Car.find();
+    res.send(cars);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+});
+
+router.post('/addcar', (req, res, next) => {
+    const { carType, carModel, price, capacity, image, fuelType, gear, country, state, rentPerHour } = req.body;
+    const {_id} = req.payload
    
-    Car.create({ carType, carModel, price, passengers, picture, engine, gear })
-      .then(response => res.json(response))
+    Car.create({ carType, carModel, price, capacity, image, fuelType, gear, country, state, rentPerHour, owner: _id })
+    .then((response) => res.json(response))
       .catch(err => res.json(err));
   });
 
-router.get('/cars', (req, res, next) => {
+router.get('/addcar', (req, res, next) => {
     Car.find()
       .then(cars => res.status(200).json(cars))
       .catch(err => res.json(err));
   });
+
  
 router.get('/cars/:carId', (req, res, next) => {
     const {carId} = req.params;
@@ -27,9 +40,9 @@ router.get('/cars/:carId', (req, res, next) => {
 
 router.put('/cars/:carId', (req, res, next) => {
     const {carId} = req.params
-    const {carType, carModel, price, passengers, picture, engine, gear} = req.body;
+    const {carType, carModel, price, capacity, image, fuelType, gear, country, state, rentPerHour} = req.body;
 
-    Car.findByIdAndUpdate(carId, {carType, carModel, price, passengers, picture, engine, gear}, {new: true} )
+    Car.findByIdAndUpdate(carId, {carType, carModel, price, capacity, image, fuelType, gear, country, state, rentPerHour}, {new: true} )
     .then((car) => res.status(201).json(car))
     .catch(err => res.json(err));
 });
@@ -40,7 +53,7 @@ router.delete('/cars/:carId', (req, res, next) => {
     Car.findByIdAndRemove(carId)
     .then(() => res.status(200).json({ message: `The car with id ${carId} successfully deleted.` }))
     .catch(err => res.json(err));
-});  
+});
 
 
 
