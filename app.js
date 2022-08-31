@@ -21,7 +21,7 @@ const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes);
 
 const carRouter = require("./routes/car.routes");          
-app.use("/api", isAuthenticated,  carRouter);  
+app.use("/api", /* isAuthenticated */  carRouter);  
 
 const authRouter = require("./routes/auth.routes");          
 app.use("/auth", authRouter);  

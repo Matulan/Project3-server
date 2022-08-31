@@ -12,6 +12,7 @@ const carSchema = new Schema(
     country: {type: String, required: true},
     state: {type: String, required: true},
     gear: {type: String, required: true},
+    accountDetails: {type: String, required: true},
     owner: {type: Schema.Types.ObjectId, ref: "User"},
     bookedTimeSlots: [
       {
